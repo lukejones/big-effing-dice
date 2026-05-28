@@ -42,9 +42,16 @@ body {
   backdrop-filter: blur(18px) saturate(120%);
   -webkit-backdrop-filter: blur(18px) saturate(120%);
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  animation: rise 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  transform: translateX(-118%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.42s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease;
 }
-@keyframes rise { from { opacity: 0; transform: translateY(14px); } }
+body.controls-open .panel {
+  transform: none;
+  opacity: 1;
+  pointer-events: auto;
+}
 
 .kicker {
   font-size: 10px; letter-spacing: 0.34em; text-transform: uppercase;
@@ -52,7 +59,8 @@ body {
 }
 .panel__head h1 {
   font-family: 'Syne', sans-serif; font-weight: 800;
-  font-size: 30px; letter-spacing: 0.02em; line-height: 1.05; margin-top: 4px;
+  font-size: 20px; letter-spacing: 0.02em; line-height: 1.1;
+  padding-right: 42px; /* clear the close button */
 }
 
 /* big die readout */
@@ -145,14 +153,54 @@ body {
 
 @media (max-height: 720px) {
   .panel { top: 12px; left: 12px; padding: 16px; }
-  .panel__head h1 { font-size: 24px; }
+  .panel__head h1 { font-size: 18px; }
   .readout { margin: 12px 0; padding: 12px 14px; }
 }
 
-/* ---------------- mobile: collapsible panel ---------------- */
-.menu-toggle { display: none; }   /* hidden on desktop */
-.panel__close { display: none; }
+/* ---------------- collapsible panel (all sizes) ---------------- */
+/* floating open button — matches the panel's blurred glass surface */
+.menu-toggle {
+  position: fixed; z-index: 4;
+  top: 18px; left: 18px;
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 11px 17px 11px 14px;
+  font: 700 12px 'Space Mono', monospace; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--ink);
+  background: var(--glass);
+  border: 1px solid var(--line); border-radius: 30px;
+  backdrop-filter: blur(18px) saturate(120%);
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.25s ease, border-color 0.2s ease, color 0.2s ease;
+}
+.menu-toggle:hover { border-color: var(--amber); color: var(--amber-soft); }
+.menu-toggle:active { transform: scale(0.96); }
+body.controls-open .menu-toggle { opacity: 0; pointer-events: none; }
 
+.menu-toggle__bars,
+.menu-toggle__bars::before,
+.menu-toggle__bars::after {
+  content: ''; display: block;
+  width: 16px; height: 2px; border-radius: 2px; background: var(--amber);
+}
+.menu-toggle__bars { position: relative; }
+.menu-toggle__bars::before { position: absolute; top: -5px; }
+.menu-toggle__bars::after  { position: absolute; top: 5px; }
+
+/* close button inside the panel header */
+.panel__close {
+  display: flex; align-items: center; justify-content: center;
+  position: absolute; top: 12px; right: 12px;
+  width: 36px; height: 36px;
+  font: 700 15px 'Space Mono', monospace; color: var(--ink);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line); border-radius: 50%;
+  cursor: pointer; transition: all 0.15s ease;
+}
+.panel__close:hover { color: var(--amber-soft); border-color: var(--amber); }
+
+/* mobile: panel becomes a full-screen sheet sliding in from the top */
 @media (max-width: 640px) {
   .panel {
     top: 0; left: 0; right: 0; bottom: 0;
@@ -161,52 +209,6 @@ body {
     padding: 64px 18px 24px;
     overflow-y: auto;
     transform: translateY(-100%);
-    opacity: 0;
-    pointer-events: none;
-    transition: transform 0.36s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease;
-    animation: none;
   }
-  body.controls-open .panel {
-    transform: translateY(0);
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  /* floating open button */
-  .menu-toggle {
-    position: fixed; z-index: 4;
-    top: 16px; left: 16px;
-    display: inline-flex; align-items: center; gap: 9px;
-    padding: 11px 16px 11px 13px;
-    font: 700 12px 'Space Mono', monospace; letter-spacing: 0.12em; text-transform: uppercase;
-    color: #1a1206;
-    background: var(--amber); border: none; border-radius: 30px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
-    cursor: pointer;
-    transition: transform 0.2s ease, opacity 0.2s ease;
-  }
-  .menu-toggle:active { transform: scale(0.95); }
-  body.controls-open .menu-toggle { opacity: 0; pointer-events: none; }
-
-  .menu-toggle__bars,
-  .menu-toggle__bars::before,
-  .menu-toggle__bars::after {
-    content: ''; display: block;
-    width: 16px; height: 2px; border-radius: 2px; background: #1a1206;
-  }
-  .menu-toggle__bars { position: relative; }
-  .menu-toggle__bars::before { position: absolute; top: -5px; }
-  .menu-toggle__bars::after  { position: absolute; top: 5px; }
-
-  /* close button inside the panel header */
-  .panel__close {
-    display: flex; align-items: center; justify-content: center;
-    position: absolute; top: 14px; right: 14px;
-    width: 38px; height: 38px;
-    font: 700 16px 'Space Mono', monospace; color: var(--ink);
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid var(--line); border-radius: 50%;
-    cursor: pointer; transition: all 0.15s ease;
-  }
-  .panel__close:hover { color: var(--amber-soft); border-color: var(--amber); }
+  body.controls-open .panel { transform: none; }
 }

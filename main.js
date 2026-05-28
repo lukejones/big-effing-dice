@@ -210,6 +210,7 @@ function animate() {
 animate();
 
 // boot
+setControls(window.innerWidth > 640); // open on desktop, collapsed on mobile
 camera.position.set(0, 0, defaultCameraDistance());
 controls.update();
 setN(6);
