@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Big Effing Dice · d1,000,000</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <canvas id="stage"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+
+  <main class="panel">
+    <header class="panel__head">
+      <span class="kicker">Polyhedral Dice Lab</span>
+      <h1>BIG EFFING DICE</h1>
+    </header>
+
+    <section class="readout">
+      <div class="readout__die" id="dieLabel">d6</div>
+      <div class="readout__mode" id="modeLabel">cube (real d6)</div>
+    </section>
+
+    <section class="presets" id="presets" aria-label="Standard dice">
+      <button data-n="2">d2</button>
+      <button data-n="4">d4</button>
+      <button data-n="6">d6</button>
+      <button data-n="8">d8</button>
+      <button data-n="10">d10</button>
+      <button data-n="12">d12</button>
+      <button data-n="20">d20</button>
+      <button data-n="100">d100</button>
+    </section>
+
+    <section class="clicker" aria-label="Choose number of faces">
+      <div class="clicker__row">
+        <button class="step" data-step="-1" aria-label="decrease">–</button>
+        <input id="numInput" type="number" min="2" max="1000000" step="1" value="6" />
+        <button class="step" data-step="1" aria-label="increase">+</button>
+      </div>
+
+      <input id="slider" class="slider" type="range" min="0" max="1000" step="1" value="0" aria-label="faces (logarithmic)" />
+
+      <div class="clicker__jumps">
+        <button data-set="2">min</button>
+        <button data-mul="0.1">÷10</button>
+        <button data-mul="10">×10</button>
+        <button data-set="1000000">d1,000,000</button>
+      </div>
+      <p class="hint">Hold <strong>+</strong> / <strong>–</strong> to race up to a million.</p>
+    </section>
+
+    <section class="view" aria-label="View controls">
+      <button id="spinBtn" class="toggle is-on">⟳ auto-spin</button>
+      <button id="wireBtn" class="toggle">▦ wireframe</button>
+      <button id="resetBtn" class="toggle">⊙ reset view</button>
+    </section>
+
+    <footer class="panel__foot">
+      <span id="faceCount">6 faces</span>
+      <span class="sep">·</span>
+      <span>drag&nbsp;rotate · scroll&nbsp;zoom</span>
+    </footer>
+  </main>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>

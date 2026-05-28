@@ -1,0 +1,4 @@
+# Static site — no build step. Three.js loads from a CDN at runtime.
+[build]
+  publish = "."
+  command = ""
