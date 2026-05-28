@@ -37,7 +37,7 @@ const material = new THREE.MeshStandardMaterial({
   roughness: 0.18,
   flatShading: true,
 });
-const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x1a1206, transparent: true, opacity: 0.55 });
+const edgeMaterial = new THREE.LineBasicMaterial({ color: 0xf4ead6, transparent: true, opacity: 0.5 });
 
 let mesh = null;
 let edges = null;
@@ -166,8 +166,31 @@ document.getElementById('wireBtn').addEventListener('click', (e) => {
 });
 document.getElementById('resetBtn').addEventListener('click', () => {
   controls.reset();
-  camera.position.set(0, 0, 3.4);
+  camera.position.set(0, 0, defaultCameraDistance());
+  controls.update();
 });
+
+// mobile: open/close the control panel
+const menuToggle = document.getElementById('menuToggle');
+const panelClose = document.getElementById('panelClose');
+function setControls(open) {
+  document.body.classList.toggle('controls-open', open);
+  menuToggle.setAttribute('aria-expanded', String(open));
+}
+menuToggle.addEventListener('click', () => setControls(true));
+panelClose.addEventListener('click', () => setControls(false));
+
+// Default camera distance. On mobile, frame the (unit-radius) die so it spans
+// ~80% of the viewport WIDTH; on desktop use a comfortable fixed distance.
+function defaultCameraDistance() {
+  if (window.innerWidth <= 640) {
+    const vFov = (camera.fov * Math.PI) / 180;
+    const hHalf = Math.atan(camera.aspect * Math.tan(vFov / 2)); // horizontal half-FOV
+    const d = 1 / (0.8 * Math.tan(hHalf));
+    return Math.min(d, controls.maxDistance);
+  }
+  return 3.4;
+}
 
 // ---------------- resize + render ----------------
 function resize() {
@@ -187,5 +210,7 @@ function animate() {
 animate();
 
 // boot
+camera.position.set(0, 0, defaultCameraDistance());
+controls.update();
 setN(6);
 buildDie(6);

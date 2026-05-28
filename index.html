@@ -23,8 +23,14 @@
   <canvas id="stage"></canvas>
   <div class="grain" aria-hidden="true"></div>
 
+  <button id="menuToggle" class="menu-toggle" aria-label="Open dice controls" aria-expanded="false">
+    <span class="menu-toggle__bars" aria-hidden="true"></span>
+    <span class="menu-toggle__txt">dice settings</span>
+  </button>
+
   <main class="panel">
     <header class="panel__head">
+      <button id="panelClose" class="panel__close" aria-label="Close controls">✕</button>
       <span class="kicker">Polyhedral Dice Lab</span>
       <h1>BIG EFFING DICE</h1>
     </header>
